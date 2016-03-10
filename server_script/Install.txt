@@ -1,0 +1,12 @@
+
+How to install a file sending server
+
+1) If you want delete all files older than 1 day, edit "clean_oneday.sh" script
+and replace absolute path to folder where you will store uploaded files.
+Then run "chmod u+x clean_oneday.sh" from terminal.
+
+Recommended cron task:
+*/10	*	*	*	*	/path/to/clean_oneday.sh
+
+2) edit _config.php and set your actual paths (where upload and which base URL will be used for returning URL to client)
+

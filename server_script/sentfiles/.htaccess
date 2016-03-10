@@ -1,0 +1,13 @@
+
+#disable ANY scripts to avoid possible attacks
+
+RemoveHandler .php .phtml .php3 .php4 .html .htm .py .pl .cgi
+RemoveType .php .phtml .php3 .php4 .html .htm
+
+#php_flag engine off
+AddType aplication/file .php .phtml .php3 .php4
+IndexIgnore *.htm *.shtml *.html
+Options +FollowSymLinks -indexes
+<Files *>
+    SetHandler default-handler
+</Files>

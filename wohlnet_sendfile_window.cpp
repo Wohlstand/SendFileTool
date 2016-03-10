@@ -11,6 +11,8 @@
 
 #include <QtDebug>
 
+#include "defines.h"
+
 Wohlnet_Sendfile_Window::Wohlnet_Sendfile_Window(QWidget *parent) :
     QDialog(parent), m_closeOnFinish(false),
     ui(new Ui::Wohlnet_Sendfile_Window), m_total(0), m_isBusy(false),
@@ -22,7 +24,7 @@ Wohlnet_Sendfile_Window::Wohlnet_Sendfile_Window(QWidget *parent) :
             this,
             SLOT(printScriptReply(QNetworkReply*)));
 
-            //This slot is used to debug the output of the server script
+    //This slot is used to debug the output of the server script
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     ui->progressBar->hide();
     ui->files_left->hide();
@@ -54,7 +56,6 @@ void Wohlnet_Sendfile_Window::uploadFileS(QStringList files)
 
 void Wohlnet_Sendfile_Window::dragEnterEvent(QDragEnterEvent *e)
 {
-    //if(isConverting) return;
     if (e->mimeData()->hasUrls()) {
         e->acceptProposedAction();
     }
@@ -90,7 +91,7 @@ void Wohlnet_Sendfile_Window::sendFile()
         QApplication::clipboard()->setText(uploadedLinks);
         if(!m_closeOnFinish)
         {
-            QMessageBox::information(this, "All files are sent!", "All files successfully sent and URLs are been copied into clipboard!");
+            QMessageBox::information(this, tr("All files are sent!"), tr("All files successfully sent and URLs are been copied into clipboard!"));
         }
         disableLabel();
         m_isBusy=false;
@@ -107,7 +108,7 @@ void Wohlnet_Sendfile_Window::sendFile()
     if(!valid)
         goto retryAgain;
 
-    QUrl mResultsURL = QUrl("http://wohlnet.ru/sentfile/cmd_send_nolog.php");
+    QUrl    mResultsURL = QUrl(UPLOAD_URL);
     QString bound="margin"; //name of the boundary
 
     QNetworkRequest request(mResultsURL); //our server with php-script
@@ -160,11 +161,10 @@ void Wohlnet_Sendfile_Window::printScriptReply(QNetworkReply *nr)
     if(url.isValid())
     {
         uploadedLinks+=reply;
-        if(!filesToUpload.isEmpty()) uploadedLinks+="\n";
-//        QApplication::clipboard()->setText(reply);
-//        QMessageBox::information(this, "sent", reply);
+        if(!filesToUpload.isEmpty())
+            uploadedLinks+="\n";
     } else {
-        QMessageBox::warning(this, "sent", reply);
+        QMessageBox::warning(this, tr("Error of file transfering"), reply);
     }
     sendFile();//continue next item
 }
@@ -186,7 +186,7 @@ void Wohlnet_Sendfile_Window::refreshLabel()
 {
     ui->progressBar->show();
     ui->files_left->show();
-    ui->files_left->setText(tr("Files left %1/%2").arg(m_total-filesToUpload.size()).arg(m_total));
+    ui->files_left->setText(tr("Sending files %1/%2...").arg(m_total-filesToUpload.size()).arg(m_total));
 }
 
 void Wohlnet_Sendfile_Window::closeOnFinish()

@@ -14,6 +14,8 @@ DESTDIR = $$PWD/bin
 SOURCES += main.cpp\
         wohlnet_sendfile_window.cpp
 
-HEADERS  += wohlnet_sendfile_window.h
+HEADERS  += wohlnet_sendfile_window.h \
+    defines.h
 
 FORMS    += wohlnet_sendfile_window.ui
+
