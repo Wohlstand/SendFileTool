@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <QClipboard>
 
+#include <QtDebug>
+
 Wohlnet_Sendfile_Window::Wohlnet_Sendfile_Window(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Wohlnet_Sendfile_Window), m_total(0), m_isBusy(false),
