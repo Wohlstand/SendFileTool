@@ -12,7 +12,7 @@
 #include <QtDebug>
 
 Wohlnet_Sendfile_Window::Wohlnet_Sendfile_Window(QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent), m_closeOnFinish(false),
     ui(new Ui::Wohlnet_Sendfile_Window), m_total(0), m_isBusy(false),
     m_reply(NULL), mNetworkManager(this)
 {
@@ -88,9 +88,13 @@ void Wohlnet_Sendfile_Window::sendFile()
             delete m_reply;
         m_reply=NULL;
         QApplication::clipboard()->setText(uploadedLinks);
-        QMessageBox::information(this, "All files are sent!", "All files successfully sent and URLs are been copied into clipboard!");
+        if(!m_closeOnFinish)
+        {
+            QMessageBox::information(this, "All files are sent!", "All files successfully sent and URLs are been copied into clipboard!");
+        }
         disableLabel();
         m_isBusy=false;
+        if(m_closeOnFinish) this->close();
         return;
     }
 
@@ -183,4 +187,9 @@ void Wohlnet_Sendfile_Window::refreshLabel()
     ui->progressBar->show();
     ui->files_left->show();
     ui->files_left->setText(tr("Files left %1/%2").arg(m_total-filesToUpload.size()).arg(m_total));
+}
+
+void Wohlnet_Sendfile_Window::closeOnFinish()
+{
+    m_closeOnFinish=true;
 }

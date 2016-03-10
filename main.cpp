@@ -9,5 +9,7 @@ int main(int argc, char *argv[])
     QStringList args=a.arguments();
     args.pop_front();//remove application path
     w.uploadFileS(args);
+    if(args.size()>0)
+        w.closeOnFinish();
     return a.exec();
 }

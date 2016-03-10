@@ -20,6 +20,7 @@ public:
     explicit Wohlnet_Sendfile_Window(QWidget *parent = 0);
     ~Wohlnet_Sendfile_Window();
     void uploadFileS(QStringList files);
+    void closeOnFinish();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
@@ -33,6 +34,7 @@ private slots:
     void refreshLabel();
 
 private:
+    bool m_closeOnFinish;
 
     Ui::Wohlnet_Sendfile_Window *ui;
     void sendFile();

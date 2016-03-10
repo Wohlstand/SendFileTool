@@ -6,9 +6,10 @@
 
 QT       += core gui widgets network
 
-TARGET = Wohlnet_SendFile
+TARGET = Wohlnet_SendFile_oneday_Qt
 TEMPLATE = app
 
+DESTDIR = $$PWD/bin
 
 SOURCES += main.cpp\
         wohlnet_sendfile_window.cpp
