@@ -2,7 +2,7 @@
 
 require_once("_config.php");
 
-$folder = $folder_ns."/";
+$folder = $folder_ns . "/";
 $newfolder = "";
 
 if(!isset($_POST['action']))
@@ -17,7 +17,7 @@ if(!file_exists($folder))
 	mkdir($folder);
 }
 
-if($_POST['action']!="oneday")
+if($_POST['action'] != "oneday")
 {
 	echo "POST_error\naction is wrong\n\n";
 	exit;
@@ -27,7 +27,7 @@ if($_POST['action']!="oneday")
 function get_file_extension($file_path)
 {
 	$basename = basename($file_path); //Getting filename
-	if ( strrpos($basename, '.') !== false )
+	if( strrpos($basename, '.') !== false )
 	{
 		//Check is file has a dot character
 		//crop last part after dot character
@@ -36,13 +36,17 @@ function get_file_extension($file_path)
 		//if dot is not found, set extension as empty
 		$file_extension = "";
 	}
+
 	return $file_extension;
 }
 
-function extractFileName($filename) {
+function extractFileName($filename)
+{
     $p = strrpos($filename, '.');
-    if ($p > 0) return substr($filename, 0, $p);
-    else return $filename;
+    if($p > 0)
+        return substr($filename, 0, $p);
+    else
+        return $filename;
 }
 
 //Convert Cyrilic into translit
@@ -60,7 +64,7 @@ function rus2translit($string)
         'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
         'ь' => "-",   'ы' => 'y',   'ъ' => "-",
         'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
- 
+
         'А' => 'A',   'Б' => 'B',   'В' => 'V',
         'Г' => 'G',   'Д' => 'D',   'Е' => 'E',
         'Ё' => 'E',   'Ж' => 'Zh',  'З' => 'Z',
@@ -72,9 +76,10 @@ function rus2translit($string)
         'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
         'Ь' => "-",   'Ы' => 'Y',   'Ъ' => "-",
         'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
-	' ' => '_', "'" => "-", ":" => "-"
+	    ' ' => '_', "'" => "-", ":" => "-", "#" => "Sharp", "(" => "_", ")" => "_"
     );
-    $str = strtr($string, $converter); 
+
+    $str = strtr($string, $converter);
     $str = preg_replace('/[[:^print:]]/', '', $str);
     return $str;
 }
@@ -85,16 +90,17 @@ $new_filename = rus2translit($_FILES["File1"]["name"]);
 if(is_uploaded_file($_FILES["File1"]["tmp_name"]))
 {
 	/***********************avoid uploading of the exploids****************************/
-    if(preg_match('/\.(php|htm|html|js)$/i',$new_filename))
+    if(preg_match('/\.(php|htm|html|js)$/i', $new_filename))
 	{
-		$new_filename.=".txt";
+		$new_filename .= ".txt";
 	}
-	if($new_filename==".htaccess")
+
+	if($new_filename == ".htaccess")
 	{
-		$new_filename = "my".$new_filename.".txt";
+		$new_filename = "my" . $new_filename . ".txt";
 	}
 	/**********************************************************************************/
-	
+
 	$new_filename = iconv('UTF-8', 'ASCII//TRANSLIT', $new_filename);
 
 	if(file_exists($folder.$new_filename))
