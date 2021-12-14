@@ -14,7 +14,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Wohlnet_Sendfile_Window</string>
+   <string>File sender</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="99,0,0">
    <item>

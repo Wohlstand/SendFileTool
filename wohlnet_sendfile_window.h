@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QNetworkAccessManager>
 #include <QQueue>
+#include <QFile>
 #include <QString>
 
 class QNetworkReply;
@@ -18,14 +19,13 @@ class Wohlnet_Sendfile_Window : public QDialog
 
 public:
     explicit Wohlnet_Sendfile_Window(QWidget *parent = 0);
-    ~Wohlnet_Sendfile_Window();
+    virtual ~Wohlnet_Sendfile_Window();
     void uploadFileS(QStringList files);
     void closeOnFinish();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
-    QByteArray buildUploadString(QString sourceFile, bool &valid);
 
 private slots:
     void printScriptReply(QNetworkReply* nr);
@@ -36,12 +36,15 @@ private slots:
 private:
     bool m_closeOnFinish;
 
-    Ui::Wohlnet_Sendfile_Window *ui;
+    Ui::Wohlnet_Sendfile_Window *ui = nullptr;
     void sendFile();
-    int                     m_total;
-    bool                    m_isBusy;
+
+    int                     m_total = 0;
+    bool                    m_isBusy = false;
     QNetworkReply*          m_reply;
     QNetworkAccessManager   mNetworkManager;
+    QFile                   m_postFile;
+    QHttpMultiPart          *m_curPostData = nullptr;
     QQueue<QString>         filesToUpload;
     QString                 uploadedLinks;
 };
