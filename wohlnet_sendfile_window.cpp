@@ -89,11 +89,12 @@ retryAgain:
             delete m_reply;
         m_reply = nullptr;
 
+        disableLabel();
+
         QApplication::clipboard()->setText(uploadedLinks);
         if(!m_closeOnFinish)
             QMessageBox::information(this, tr("All files are sent!"), tr("All files successfully sent and URLs are been copied into clipboard!"));
 
-        disableLabel();
         m_isBusy = false;
 
         if(m_closeOnFinish)
