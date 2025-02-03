@@ -15,8 +15,8 @@
 
 Wohlnet_Sendfile_Window::Wohlnet_Sendfile_Window(QWidget *parent) :
     QDialog(parent), m_closeOnFinish(false),
-    ui(new Ui::Wohlnet_Sendfile_Window), m_total(0), m_isBusy(false),
-    m_reply(NULL),
+    ui(new Ui::Wohlnet_Sendfile_Window), m_total(0),
+    m_reply(nullptr),
     mNetworkManager(this),
     m_curPostData(nullptr)
 {
@@ -35,9 +35,29 @@ Wohlnet_Sendfile_Window::~Wohlnet_Sendfile_Window()
     delete ui;
 }
 
-void Wohlnet_Sendfile_Window::uploadFileS(QStringList files)
+void Wohlnet_Sendfile_Window::uploadFile(const QString &file)
 {
-    if(files.isEmpty()) return;
+    if(file.isEmpty())
+        return;
+
+    filesToUpload.enqueue(file);
+
+    qApp->setActiveWindow(this);
+    if(!m_isBusy && !filesToUpload.isEmpty())
+    {
+        ui->progressBar->setEnabled(true);
+        uploadedLinks.clear();
+        sendFile();
+    }
+
+    m_total++;
+    refreshLabel();
+}
+
+void Wohlnet_Sendfile_Window::uploadFileS(const QStringList &files)
+{
+    if(files.isEmpty())
+        return;
 
     foreach(QString file, files)
         filesToUpload.enqueue(file);
@@ -86,12 +106,13 @@ retryAgain:
         ui->progressBar->setValue(0);
 
         if(m_reply)
-            delete m_reply;
+            m_reply->deleteLater();
         m_reply = nullptr;
 
         disableLabel();
 
         QApplication::clipboard()->setText(uploadedLinks);
+
         if(!m_closeOnFinish)
             QMessageBox::information(this, tr("All files are sent!"), tr("All files successfully sent and URLs are been copied into clipboard!"));
 

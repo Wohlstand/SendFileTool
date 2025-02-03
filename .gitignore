@@ -20,6 +20,7 @@ Makefile.*
 */Makefile.*
 *-build-*
 *build-*
+/build/
 /bin
 /bin-w32
 

@@ -6,6 +6,7 @@
 #include <QQueue>
 #include <QFile>
 #include <QString>
+#include <QAtomicInteger>
 
 class QNetworkReply;
 
@@ -20,7 +21,8 @@ class Wohlnet_Sendfile_Window : public QDialog
 public:
     explicit Wohlnet_Sendfile_Window(QWidget *parent = 0);
     virtual ~Wohlnet_Sendfile_Window();
-    void uploadFileS(QStringList files);
+    void uploadFile(const QString &file);
+    void uploadFileS(const QStringList &files);
     void closeOnFinish();
 
 protected:
@@ -39,8 +41,8 @@ private:
     Ui::Wohlnet_Sendfile_Window *ui = nullptr;
     void sendFile();
 
-    int                     m_total = 0;
-    bool                    m_isBusy = false;
+    QAtomicInteger<int>     m_total = QAtomicInteger<int>(0);
+    QAtomicInteger<bool>    m_isBusy = QAtomicInteger<bool>(false);
     QNetworkReply*          m_reply;
     QNetworkAccessManager   mNetworkManager;
     QFile                   m_postFile;
